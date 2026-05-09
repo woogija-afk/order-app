@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>개포간장비서 PRO</title>
+
+<!-- PWA 메타태그 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="간장비서">
+<meta name="theme-color" content="#2F5233">
+
+<!-- PWA 아이콘 (인라인 SVG → data URL) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkY1MjMzIi8+PHRleHQgeD0iOTYiIHk9IjEyNSIgZm9udC1zaXplPSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPvCfk508L3RleHQ+PC9zdmc+">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkY1MjMzIi8+PHRleHQgeD0iOTYiIHk9IjEyNSIgZm9udC1zaXplPSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPvCfk508L3RleHQ+PC9zdmc+">
+
+<!-- 인라인 Web App Manifest -->
+<script>
+  const manifestData = {
+    name: "개포간장비서 PRO",
+    short_name: "간장비서",
+    description: "발주서 작성 및 현황 관리",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#EAE7E0",
+    theme_color: "#2F5233",
+    orientation: "portrait",
+    icons: [
+      { src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkY1MjMzIi8+PHRleHQgeD0iOTYiIHk9IjEyNSIgZm9udC1zaXplPSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPvCfk508L3RleHQ+PC9zdmc+", sizes: "192x192", type: "image/svg+xml" },
+      { src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkY1MjMzIi8+PHRleHQgeD0iOTYiIHk9IjEyNSIgZm9udC1zaXplPSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPvCfk508L3RleHQ+PC9zdmc+", sizes: "512x512", type: "image/svg+xml" }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+  const manifestURL = URL.createObjectURL(blob);
+  document.write(`<link rel="manifest" href="${manifestURL}">`);
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2F5233; --rust: #8B4A3C; --bg: #EAE7E0; --surface: #FFFFFF;
+  --sidebar: #1A1D20; --border: rgba(0,0,0,0.12); --ivory: #F9F6EF; --steel: #455A64;
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:#000; height:100dvh; display:flex; flex-direction:column; overflow:hidden;}
+#topbar{background:var(--surface); padding:0 20px; height:60px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; z-index:1000;}
+#content{flex:1; padding:12px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:120px;}
+.input-section{background:var(--surface); padding:16px; border-radius:18px; border:2px solid var(--border); margin-bottom:15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);}
+.slabel{font-size:0.75rem; font-weight:900; color:var(--green); margin-bottom:6px; display:block;}
+.res-input{width:100%; padding:14px; margin-bottom:8px; border-radius:12px; border:2px solid var(--border); background:var(--ivory); font-size:1rem; font-weight:800; outline:none;}
+.res-input:focus{border-color: var(--green); background: #fff;}
+.row-layout {display: flex; gap: 5px; width: 100%; margin-bottom: 8px; align-items: center;}
+.col-flex {flex: 1; min-width: 0;}
+.btn-tomorrow {padding: 10px 15px; background: var(--rust); color: white; border: none; border-radius: 10px; font-weight: 900; font-size: 0.9rem; cursor: pointer; white-space: nowrap;}
+.btn-tomorrow.active {background: var(--green);}
+.items-display{display:flex; flex-wrap:wrap; gap:8px; padding:12px; background:var(--ivory); border-radius:12px; border:2px solid var(--border); min-height:50px; margin-bottom:12px;}
+.color-chip{padding:6px 12px; border-radius:20px; font-size:0.85rem; font-weight:900; display:inline-flex; align-items:center; gap:6px; border:1px solid #ddd; background:#fff;}
+.btn-primary{width:100%; padding:16px; background:var(--green); color:white; border:none; border-radius:14px; font-weight:900; font-size:1.05rem; cursor:pointer;}
+#bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 85px; background: #1A1D20; display: flex; border-top: 3px solid var(--green); z-index: 9999; padding-bottom: env(safe-area-inset-bottom, 15px); }
+.b-nav-item { flex: 1; color: #888; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; border: none; background: none; }
+.b-nav-item.active { color: #FFD700; background: rgba(255,255,255,0.05); }
+.order-card{display:flex; justify-content:space-between; align-items:center; background:#fff; border-radius:14px; padding:15px; margin-bottom:10px; border:2px solid var(--border);}
+
+/* PWA 설치 배너 */
+#install-banner{display:none; background:var(--green); color:white; padding:12px 16px; font-size:0.85rem; font-weight:700; align-items:center; gap:10px; flex-shrink:0;}
+#install-banner button{background:white; color:var(--green); border:none; border-radius:8px; padding:7px 14px; font-weight:900; cursor:pointer; font-size:0.85rem; white-space:nowrap;}
+#install-banner .close-btn{background:transparent; color:white; font-size:1.2rem; padding:0 4px; margin-left:auto;}
+</style>
+</head>
+<body>
+
+<!-- PWA 설치 유도 배너 -->
+<div id="install-banner">
+  <span>📱</span>
+  <span id="install-msg">홈 화면에 추가하면 앱처럼 사용 가능!</span>
+  <button id="install-btn" onclick="installApp()">설치</button>
+  <button class="close-btn" onclick="closeBanner()">✕</button>
+</div>
+
+<div id="topbar">
+  <div id="panel-title" style="font-weight:900; color:var(--green);">📝 발주서 작성</div>
+  <div onclick="location.reload()" style="cursor:pointer; font-size:1.2rem;">🔄</div>
+</div>
+
+<div id="content">
+  <div id="panel-order" class="panel">
+    <div class="input-section">
+      <span class="slabel">거래처 및 인수자</span>
+      <select id="v-sel" class="res-input" onchange="handleVendorSelect(this.value)">
+        <option value="">거래처 선택</option>
+        <option>S&P</option><option>DS이엔씨</option><option>이젠크리트</option><option>서현이앤씨</option><option>피와이테크</option><option>케이탑건설</option><option>정원산업</option><option>덕산건설</option><option>오성건설</option><option>대일</option><option>미담방수</option><option>태강방수</option><option>세명산업</option><option>원푸드림</option><option>창성티지</option><option>성찬</option>
+      </select>
+      <select id="p-sel" class="res-input" onchange="handlePersonSelect(this.value)"><option value="">인수자 선택</option></select>
+
+      <span class="slabel">도착 일시</span>
+      <div class="row-layout">
+        <button class="btn-tomorrow" id="btn-tmr" onclick="toggleTomorrow()">내일</button>
+        <div id="date-inputs" class="row-layout" style="flex:1;">
+            <input type="number" id="arr-m" class="res-input" style="margin-bottom:0; text-align:center;" placeholder="월">
+            <input type="number" id="arr-d" class="res-input" style="margin-bottom:0; text-align:center;" placeholder="일">
+        </div>
+        <select id="arr-ampm" class="res-input" style="width:75px; margin-bottom:0;"><option value="오전">오전</option><option value="오후">오후</option></select>
+        <input type="number" id="arr-h" class="res-input" style="width:60px; margin-bottom:0; text-align:center;" placeholder="7">
+      </div>
+
+      <span class="slabel">현장 주소</span>
+      <input type="text" id="res-a" class="res-input" placeholder="주소를 입력하세요">
+
+      <span class="slabel">품목 및 수량</span>
+      <div class="row-layout">
+        <div class="col-flex">
+          <select id="item-sel" class="res-input" style="margin-bottom:0;" onchange="handleItemSelect(this.value)">
+            <option value="">품목 선택</option>
+            <optgroup label="SL 시리즈">
+                <option>SL</option><option>SL무</option><option>SLP1.P2</option><option>SLP1</option><option>SLP2</option><option>SLP3</option>
+            </optgroup>
+            <optgroup label="HL 시리즈">
+                <option>HL</option><option>HL무</option><option>HLP1.P2</option><option>HLP1</option><option>HLP2</option><option>HLP3</option>
+            </optgroup>
+            <optgroup label="BT 시리즈">
+                <option>BT12</option><option>BT12무</option><option>BT6</option><option>BT6무</option>
+            </optgroup>
+            <optgroup label="기타">
+                <option>Pig</option><option>F5</option><option>F6</option><option>F4</option><option>ACC</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="col-flex"><input type="number" id="qty-in" class="res-input" style="margin-bottom:0;" placeholder="수량"></div>
+        <div style="width:65px;"><select id="unit-sel" class="res-input" style="margin-bottom:0; padding:14px 2px;"><option>세트</option><option>개</option><option>통</option><option>박스</option></select></div>
+        <div class="col-flex">
+          <select id="color-sel" class="res-input" style="margin-bottom:0;">
+            <option value="">색상</option>
+            <option>녹색</option><option>적갈색</option><option>회색</option><option>철황색</option><option>진회색</option><option>밝은회색</option><option>아이보리</option><option>허니옐로</option><option>블루</option><option value="무색">무색</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" style="padding:10px; background:var(--steel); margin-bottom:12px;" onclick="addItemPro()">+ 품목 추가</button>
+      <div id="items-visual-pro" class="items-display"></div>
+      <textarea id="res-i" class="res-input" style="min-height:80px; font-size:0.9rem;" placeholder="리스트 자동 생성"></textarea>
+
+      <span class="slabel">운반비</span>
+      <select id="f-sel" class="res-input" onchange="syncFreight(this.value)">
+        <option value="">공란</option>
+        <option value="착불">착불</option>
+        <option value="선불">선불</option>
+        <option value="후불청구">후불청구</option>
+      </select>
+      <input type="text" id="res-f" class="res-input" placeholder="비워두면 항목 생략">
+
+      <button class="btn-primary" onclick="copyAndSaveOrderPro()">📋 발주서 복사 및 저장</button>
+    </div>
+  </div>
+
+  <div id="panel-todo" class="panel" style="display:none;">
+    <div id="dash-order-list"></div>
+  </div>
+</div>
+
+<div id="bottom-nav">
+  <button class="b-nav-item active" id="btn-nav-order" onclick="showPanel('order')">📝 발주서</button>
+  <button class="b-nav-item" id="btn-nav-todo" onclick="showPanel('todo')">🚚 현황</button>
+</div>
+
+<script>
+// ── Service Worker 등록 (오프라인 캐싱) ──────────────────────────
+const SW_CODE = `
+const CACHE = 'gaepyo-v1';
+const ASSETS = [location.href];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+});
+`;
+
+if ('serviceWorker' in navigator) {
+  const swBlob = new Blob([SW_CODE], {type: 'application/javascript'});
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(() => {});
+}
+
+// ── PWA 설치 프롬프트 ──────────────────────────────────────────────
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'flex';
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').style.display = 'none';
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; closeBanner(); });
+  } else {
+    // iOS Safari 안내
+    alert('Safari에서: 하단 공유버튼(□↑) → "홈 화면에 추가" 를 탭하세요.');
+  }
+}
+function closeBanner() { document.getElementById('install-banner').style.display = 'none'; }
+
+// iOS는 beforeinstallprompt 없으므로 별도 감지
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+if (isIOS && !isStandalone) {
+  document.getElementById('install-msg').textContent = '공유버튼(□↑) → 홈 화면에 추가';
+  document.getElementById('install-btn').textContent = '방법 보기';
+  document.getElementById('install-btn').onclick = () => alert('Safari 하단 공유버튼(□↑) 탭 → "홈 화면에 추가" 선택');
+  document.getElementById('install-banner').style.display = 'flex';
+}
+
+// ── 앱 로직 (기존 동일) ──────────────────────────────────────────
+const V_DATA = {
+  "S&P":["장길녕이사"], "DS이엔씨":["홍동선사장","정하성팀장","홍봉섭팀장"], "이젠크리트":["김도훈이사"],
+  "서현이앤씨":["이성균이사"], "피와이테크":["박찬현사장"], "케이탑건설":["김대훈사장"],
+  "정원산업":["최근영사장"], "덕산건설":["윤상준사장"], "오성건설":["오영락팀장"],
+  "세명산업":["정용달사장(대구)","근호도료"], "원푸드림":["이상용과장"], "성찬":["이미라실장"],
+  "대일":["이주용사장"], "미담방수":["천성우사장"], "태강방수":["백석사장"], "창성티지":["이정환사장"]
+};
+const NO_COL = ["SL무","SLP1.P2","SLP1","SLP2","SLP3","HL무","HLP1.P2","HLP1","HLP2","HLP3","BT12무","BT6무","F5","F6","F4","ACC"];
+
+let selectedVendor = "", selectedPerson = "", isTomorrowMode = false;
+let todayOrders = JSON.parse(localStorage.getItem('orders_v52') || '[]');
+
+function handleVendorSelect(val) {
+  selectedVendor = val;
+  const pSel = document.getElementById('p-sel');
+  pSel.innerHTML = '<option value="">인수자 선택</option>';
+  if(V_DATA[val]) V_DATA[val].forEach(p => { pSel.innerHTML += `<option value="${p}">${p}</option>`; });
+}
+function handlePersonSelect(val) { selectedPerson = val; }
+function handleItemSelect(val) {
+  document.getElementById('color-sel').value = NO_COL.includes(val) ? "무색" : "";
+}
+function syncFreight(val) { document.getElementById('res-f').value = val; }
+function toggleTomorrow() {
+  isTomorrowMode = !isTomorrowMode;
+  const btn = document.getElementById('btn-tmr');
+  const dIn = document.getElementById('date-inputs');
+  if(isTomorrowMode) { btn.classList.add('active'); dIn.style.opacity = "0.3"; document.getElementById('arr-h').value = "7"; }
+  else { btn.classList.remove('active'); dIn.style.opacity = "1"; }
+}
+
+function addItemPro() {
+  const item = document.getElementById('item-sel').value, color = document.getElementById('color-sel').value, qty = document.getElementById('qty-in').value, unit = document.getElementById('unit-sel').value;
+  if(!item || !qty) return;
+  const ta = document.getElementById('res-i');
+  let lines = ta.value.split('\n').filter(l => l.trim());
+  const cp = (color === "무색" || !color) ? "" : ` ${color}`;
+  const newLine = `${lines.length + 1})${item}${cp} ${qty}${unit}`;
+  ta.value = lines.concat(newLine).join('\n');
+  document.getElementById('item-sel').value = ''; document.getElementById('qty-in').value = '';
+  updateChips();
+}
+
+function updateChips() {
+  const vi = document.getElementById('items-visual-pro');
+  const ta = document.getElementById('res-i');
+  const lines = ta.value.split('\n').filter(l => l.trim());
+  vi.innerHTML = lines.map((l) => `<div class="color-chip"><b>${l.trim()}</b></div>`).join('');
+}
+
+function copyAndSaveOrderPro() {
+  const v = selectedVendor, p = selectedPerson, a = document.getElementById('res-a').value, i = document.getElementById('res-i').value, f = document.getElementById('res-f').value.trim();
+  if(!v || !i) { alert("데이터 확인 요망"); return; }
+
+  const ampm = document.getElementById('arr-ampm').value, ah = document.getElementById('arr-h').value;
+  let arrivalTxt = isTomorrowMode ? `내일 ${ampm} ${ah || '7'}시 도착` : (document.getElementById('arr-m').value ? `${document.getElementById('arr-m').value}월 ${document.getElementById('arr-d').value}일 ${ampm} ${ah}시 도착` : "미정(협의)");
+
+  let freightSection = f !== "" ? `운반비: ${f}\n` : "";
+  let footerPrefix = (document.getElementById('f-sel').value === "착불") ? "착불출고바랍니다." : "출고바랍니다.";
+  let footerInfo = (v === "DS이엔씨") ? "출고정보 홍동선사장에게 송부바랍니다." : "출고정보 인수자에게 송부바랍니다.";
+
+  const txt = `${v}\n${p}인수\n${arrivalTxt}\n${a}\n${i}\n${freightSection}\n${footerPrefix}\n${footerInfo}`;
+
+  // 클립보드 복사 (모던 API 우선, 폴백)
+  const doCopy = () => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(txt);
+    }
+    const tArea = document.createElement("textarea");
+    tArea.value = txt; tArea.style.position = 'fixed'; tArea.style.opacity = '0';
+    document.body.appendChild(tArea); tArea.focus(); tArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tArea);
+    return Promise.resolve();
+  };
+
+  doCopy().then(() => {
+    todayOrders.push({ vendor: v, address: a, items: i.split('\n')[0], time: Date.now() });
+    localStorage.setItem('orders_v52', JSON.stringify(todayOrders));
+    alert("복사 완료 및 현황판 저장!");
+    location.reload();
+  }).catch(() => alert("복사 실패"));
+}
+
+function renderOrderList() {
+  const list = document.getElementById('dash-order-list');
+  list.innerHTML = todayOrders.map((o, idx) => `
+    <div class="order-card">
+      <div style="flex:1;">
+        <b>${o.vendor}</b><br>
+        <span style="font-size:0.8rem; color:#666;">${o.address}</span><br>
+        <span style="font-size:0.85rem; color:var(--rust); font-weight:700;">${o.items}...</span>
+      </div>
+      <button style="padding:12px 15px; background:var(--green); color:#fff; border:none; border-radius:10px; font-weight:900;" onclick="doneOrder(${idx})">완료</button>
+    </div>`).join('') || '<p style="text-align:center; padding:40px; color:#888;">발주 내역이 없습니다.</p>';
+}
+
+function doneOrder(i) {
+  todayOrders.splice(i, 1);
+  localStorage.setItem('orders_v52', JSON.stringify(todayOrders));
+  renderOrderList();
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+  document.getElementById('panel-'+id).style.display='block';
+  document.querySelectorAll('.b-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('btn-nav-'+id).classList.add('active');
+  if(id === 'todo') renderOrderList();
+}
+
+window.onload = () => { renderOrderList(); };
+</script>
+</body>
+</html>
